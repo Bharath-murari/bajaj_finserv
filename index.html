@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFHL API Frontend</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      padding: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>BFHL API Frontend</h1>
+  
+  <label for="dataInput"><strong>Enter JSON Array:</strong></label>
+  <textarea id="dataInput">["A","C","z","1","2","#"]</textarea>
+  
+  <button onclick="sendRequest()">Send to API</button>
+  
+  <h2>Response:</h2>
+  <pre id="responseBox">Waiting for response...</pre>
+  
+  <script>
+    async function sendRequest() {
+      const input = document.getElementById("dataInput").value;
+      const responseBox = document.getElementById("responseBox");
+      
+      try {
+        const parsedData = JSON.parse(input); // Validate input is JSON
+        const res = await fetch("http://localhost:3000/bfhl", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: parsedData })
+        });
+        
+        const json = await res.json();
+        responseBox.textContent = JSON.stringify(json, null, 2);
+      } catch (err) {
+        responseBox.textContent = "❌ Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
